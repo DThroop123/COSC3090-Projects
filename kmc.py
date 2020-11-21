@@ -12,13 +12,17 @@ import math
 
 def kmc(k, m, points):
 	centers = [[0, 0], [0, 0]]
+	prevCenter = [[0, 0], [0, 0]]
 	clusters = [[],[]]
 	noChange = True 
 	arb = 0 
 
-	
-	# Create k arbitrary clusters - pick k points as cluster center and assign
-	# each other point to the closest center
+
+	# assign k aribitrary centers
+	for i in range(k):
+			# assign k centers
+			arb = random.randint(0, len(points) - 1)
+			centers[i] = points[arb]
 
 	# check if the centers have changed 
 	while(noChange):
@@ -28,7 +32,6 @@ def kmc(k, m, points):
 		for i in range(k):
 			# assign k centers
 			arb = random.randint(0, len(points) - 1)
-			print(arb)
 			centers[i] = points[arb]
 
 		# assign k aribitrary clusters
@@ -39,17 +42,19 @@ def kmc(k, m, points):
 				else:
 					clusters[0].append(points[i])
 
+
+		# Re-compute the center  of each cluster
+
 		print(centers)
-		print(clusters)
-
-		# Re-compute the center of each cluster
-
-
-
-
-
+		print(points)
 
 		noChange = False
+
+
+
+
+
+		# noChange = checkCenter(centers, prevCenter)
 
 
 
@@ -68,12 +73,16 @@ def kmc(k, m, points):
 
 	return centers
 
+# TESTED 
 # calculates the distance between points p1 and p2
 def distance(p1, p2):
 
+	print(math.sqrt(((p2[0] - p1[0])**2) + ((p2[1] - p1[1])**2)))
 	return (math.sqrt(((p2[0] - p1[0])**2) + ((p2[1] - p1[1])**2)))
 
-# calculates the centroid for 
+
+# TESTED 
+# calculates the centroid for each clusters
 def centroidCalc(clusters):
 
 	newCenterOne = [0, 0]
@@ -81,12 +90,42 @@ def centroidCalc(clusters):
 	xSum = 0
 	ySum = 0
 
-	for i in range(len(clusters[0])):
-		
 
+	#calculate first centroid
+	for i in range(len(clusters[0])):
+		xSum += clusters[0][i][0]
+
+	newCenterOne[0] = xSum/len(clusters[0])
+
+	for i in range(len(clusters[0])):
+		ySum += clusters[0][i][1]
+
+	newCenterOne[1] = ySum/len(clusters[0])
+
+	# calculate second centroid
+
+	xSum = 0
+	ySum = 0
+
+	for i in range(len(clusters[1])):
+		xSum += clusters[1][i][0]
+
+	newCenterTwo[0] = xSum/len(clusters[1])
+
+	for i in range(len(clusters[1])):
+		ySum += clusters[1][i][1]
+
+	newCenterTwo[1] = ySum/len(clusters[1])
 
 
 	return newCenterOne, newCenterTwo
+
+
+# def checkDif(p1, p2):
+	
+
+
+
 
 
 
@@ -97,7 +136,7 @@ def centroidCalc(clusters):
 # Test 1
 
 test1 = [[1.3, 1.1], [1.3, .2], [.6, 2.8], [3.0, 3.2], [1.2, .7], [1.4, 1.6], [1.2, 1.0], [1.2, 1.1], [.6, 1.5], [1.8, 2.6], [1.2, 1.3], [1.2, 1.0], [0.0, 1.9]]
-print(test1)
+# print(test1)
 
 kmc(2, 2, test1)
 
