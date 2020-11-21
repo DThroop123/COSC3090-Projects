@@ -17,7 +17,6 @@ def kmc(k, m, points):
 	noChange = True 
 	arb = 0 
 
-
 	# assign k aribitrary centers
 	for i in range(k):
 			# assign k centers
@@ -27,13 +26,6 @@ def kmc(k, m, points):
 	# check if the centers have changed 
 	while(noChange):
 
-		# working
-		# create k aribitrary centers
-		for i in range(k):
-			# assign k centers
-			arb = random.randint(0, len(points) - 1)
-			centers[i] = points[arb]
-
 		# assign k aribitrary clusters
 		for i in range(len(points)):
 			if not (points[i] == centers[0] or points[i] == centers[1]):
@@ -42,34 +34,21 @@ def kmc(k, m, points):
 				else:
 					clusters[0].append(points[i])
 
-
 		# Re-compute the center  of each cluster
 
+		# save previous centers
+		prevCenter[0] = centers[0]
+		prevCenter[1] = centers[1]
+
+		centers[0] = centroidCalc(clusters)[0]
+		centers[1] = centroidCalc(clusters)[1]
+
+		# if its not the first time in the while loop we want to check for change
+		noChange = checkChange(prevCenter, centers)
 		print(centers)
-		print(points)
+		print(prevCenter)
 
-		noChange = False
-
-
-
-
-
-		# noChange = checkCenter(centers, prevCenter)
-
-
-
-
-
-	
-
-
-
-	
-
-	# Re-assign points to clusters
-
-	# repeat
-
+	print("we dont converge")
 
 	return centers
 
@@ -77,7 +56,6 @@ def kmc(k, m, points):
 # calculates the distance between points p1 and p2
 def distance(p1, p2):
 
-	print(math.sqrt(((p2[0] - p1[0])**2) + ((p2[1] - p1[1])**2)))
 	return (math.sqrt(((p2[0] - p1[0])**2) + ((p2[1] - p1[1])**2)))
 
 
@@ -103,7 +81,6 @@ def centroidCalc(clusters):
 	newCenterOne[1] = ySum/len(clusters[0])
 
 	# calculate second centroid
-
 	xSum = 0
 	ySum = 0
 
@@ -120,8 +97,13 @@ def centroidCalc(clusters):
 
 	return newCenterOne, newCenterTwo
 
+# function that tests to see if there is a difference between the changing centers
+def checkChange(prevCenters, currCenters):
 
-# def checkDif(p1, p2):
+	if prevCenters[0] == currCenters[0] and prevCenters[1] == currCenters[1]:
+		return False
+	else:
+		return True
 	
 
 
@@ -138,7 +120,7 @@ def centroidCalc(clusters):
 test1 = [[1.3, 1.1], [1.3, .2], [.6, 2.8], [3.0, 3.2], [1.2, .7], [1.4, 1.6], [1.2, 1.0], [1.2, 1.1], [.6, 1.5], [1.8, 2.6], [1.2, 1.3], [1.2, 1.0], [0.0, 1.9]]
 # print(test1)
 
-kmc(2, 2, test1)
+print(kmc(2, 2, test1))
 
 # expected output
 
